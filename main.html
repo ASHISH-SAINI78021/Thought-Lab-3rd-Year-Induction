@@ -1,645 +1,691 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thought Lab | 3rd Year Induction</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        :root {
-            --primary: #8B5CF6;
-            --primary-dark: #7C3AED;
-            --secondary: #10B981;
-            --accent: #EC4899;
-            --dark-1: #0F172A;
-            --dark-2: #1E293B;
-            --dark-3: #334155;
-            --light: #F1F5F9;
-            --gray: #94A3B8;
+      :root {
+        --primary: #8b5cf6;
+        --primary-dark: #7c3aed;
+        --secondary: #10b981;
+        --accent: #ec4899;
+        --dark-1: #0f172a;
+        --dark-2: #1e293b;
+        --dark-3: #334155;
+        --light: #f1f5f9;
+        --gray: #94a3b8;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        background-color: var(--dark-1);
+        color: var(--light);
+        line-height: 1.7;
+        overflow-x: hidden;
+      }
+
+      /* Smooth scroll */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Glow effect */
+      .glow {
+        text-shadow: 0 0 10px rgba(139, 92, 246, 0.7);
+      }
+
+      /* Header */
+      header {
+        background: linear-gradient(135deg, var(--dark-2), var(--dark-1));
+        padding: 6rem 0 8rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 20% 30%,
+            rgba(139, 92, 246, 0.15) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 80% 70%,
+            rgba(16, 185, 129, 0.15) 0%,
+            transparent 40%
+          );
+        z-index: 0;
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      .header-content h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(to right, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: fadeInDown 1s ease;
+      }
+
+      .header-content p {
+        font-size: 1.25rem;
+        color: var(--gray);
+        margin-bottom: 2.5rem;
+        animation: fadeInUp 1s ease 0.3s forwards;
+        opacity: 0;
+      }
+
+      .event-highlight {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--dark-3);
+        border-radius: 12px;
+        padding: 1.5rem 2rem;
+        display: inline-block;
+        margin-top: 1rem;
+        animation: fadeIn 1s ease 0.6s forwards;
+        opacity: 0;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .event-highlight h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--light);
+      }
+
+      .event-highlight p {
+        color: var(--gray);
+        margin-bottom: 0;
+        font-size: 1rem;
+      }
+
+      /* Main content */
+      .main-content {
+        position: relative;
+        z-index: 3;
+        margin-top: -4rem;
+        padding-bottom: 4rem;
+      }
+
+      /* Section styling */
+      .section {
+        background: var(--dark-2);
+        border-radius: 16px;
+        padding: 3rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        border: 1px solid var(--dark-3);
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s ease;
+      }
+
+      .section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .section h2 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        color: var(--light);
+        position: relative;
+        display: inline-block;
+      }
+
+      .section h2::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(to right, var(--primary), var(--accent));
+        border-radius: 2px;
+      }
+
+      /* Team cards */
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .team-card {
+        background: var(--dark-3);
+        border-radius: 12px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        border-left: 4px solid var(--primary);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .team-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        border-left-color: var(--secondary);
+      }
+
+      .team-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--light);
+        display: flex;
+        align-items: center;
+      }
+
+      .team-card h3 i {
+        margin-right: 12px;
+        color: var(--primary);
+      }
+
+      .team-card ul {
+        list-style-type: none;
+      }
+
+      .team-card ul li {
+        padding: 0.6rem 0;
+        position: relative;
+        padding-left: 2rem;
+        color: var(--gray);
+        border-bottom: 1px dashed rgba(148, 163, 184, 0.2);
+      }
+
+      .team-card ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--secondary);
+        font-weight: bold;
+      }
+
+      /* Club section */
+      .club-section {
+        background: linear-gradient(135deg, var(--dark-2), var(--dark-1));
+        padding: 5rem 0;
+        margin: 4rem 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .club-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 10% 20%,
+            rgba(139, 92, 246, 0.1) 0%,
+            transparent 30%
+          ),
+          radial-gradient(
+            circle at 90% 80%,
+            rgba(16, 185, 129, 0.1) 0%,
+            transparent 30%
+          );
+        z-index: 1;
+      }
+
+      .club-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        text-align: center;
+      }
+
+      .meditation-icon {
+        font-size: 3.5rem;
+        color: var(--secondary);
+        margin-bottom: 2rem;
+        display: inline-block;
+        animation: float 4s ease-in-out infinite;
+      }
+
+      .club-content h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, var(--secondary), var(--primary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .club-content p {
+        color: var(--gray);
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+      }
+
+      /* Buttons */
+      .btn-group {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.9rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          to right,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: white;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        color: var(--light);
+        border: 1px solid var(--dark-3);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+      }
+
+      /* Footer */
+      footer {
+        background: var(--dark-1);
+        padding: 4rem 0 2rem;
+        border-top: 1px solid var(--dark-3);
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        text-align: center;
+      }
+
+      .footer-logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+      }
+
+      .footer-description {
+        color: var(--gray);
+        max-width: 600px;
+        margin: 0 auto 2rem;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .social-links a {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--dark-2);
+        color: var(--light);
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        border: 1px solid var(--dark-3);
+      }
+
+      .social-links a:hover {
+        background: linear-gradient(to right, var(--primary), var(--accent));
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        border-color: transparent;
+      }
+
+      .copyright {
+        color: var(--dark-3);
+        font-size: 0.9rem;
+        margin-top: 2rem;
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        to {
+          opacity: 1;
         }
+      }
 
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-        body {
-            background-color: var(--dark-1);
-            color: var(--light);
-            line-height: 1.7;
-            overflow-x: hidden;
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
         }
-
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        /* Glow effect */
-        .glow {
-            text-shadow: 0 0 10px rgba(139, 92, 246, 0.7);
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
         }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--dark-2), var(--dark-1));
-            padding: 6rem 0 8rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        .header-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.15) 0%, transparent 40%);
-            z-index: 0;
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
         }
-
-        .header-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 2rem;
+        50% {
+          transform: translateY(-10px);
         }
+      }
 
+      /* Responsive */
+      @media (max-width: 768px) {
         .header-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: fadeInDown 1s ease;
+          font-size: 2.5rem;
         }
 
         .header-content p {
-            font-size: 1.25rem;
-            color: var(--gray);
-            margin-bottom: 2.5rem;
-            animation: fadeInUp 1s ease 0.3s forwards;
-            opacity: 0;
+          font-size: 1.1rem;
         }
 
         .event-highlight {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--dark-3);
-            border-radius: 12px;
-            padding: 1.5rem 2rem;
-            display: inline-block;
-            margin-top: 1rem;
-            animation: fadeIn 1s ease 0.6s forwards;
-            opacity: 0;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+          padding: 1.2rem;
         }
 
         .event-highlight h2 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--light);
+          font-size: 1.2rem;
         }
 
-        .event-highlight p {
-            color: var(--gray);
-            margin-bottom: 0;
-            font-size: 1rem;
-        }
-
-        /* Main content */
-        .main-content {
-            position: relative;
-            z-index: 3;
-            margin-top: -4rem;
-            padding-bottom: 4rem;
-        }
-
-        /* Section styling */
         .section {
-            background: var(--dark-2);
-            border-radius: 16px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--dark-3);
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0);
+          padding: 2rem;
         }
 
         .section h2 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: var(--light);
-            position: relative;
-            display: inline-block;
+          font-size: 1.8rem;
         }
 
-        .section h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            border-radius: 2px;
-        }
-
-        /* Team cards */
         .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+          grid-template-columns: 1fr;
         }
 
-        .team-card {
-            background: var(--dark-3);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            border-left: 4px solid var(--primary);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .team-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border-left-color: var(--secondary);
-        }
-
-        .team-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--light);
-            display: flex;
-            align-items: center;
-        }
-
-        .team-card h3 i {
-            margin-right: 12px;
-            color: var(--primary);
-        }
-
-        .team-card ul {
-            list-style-type: none;
-        }
-
-        .team-card ul li {
-            padding: 0.6rem 0;
-            position: relative;
-            padding-left: 2rem;
-            color: var(--gray);
-            border-bottom: 1px dashed rgba(148, 163, 184, 0.2);
-        }
-
-        .team-card ul li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--secondary);
-            font-weight: bold;
-        }
-
-        /* Club section */
-        .club-section {
-            background: linear-gradient(135deg, var(--dark-2), var(--dark-1));
-            padding: 5rem 0;
-            margin: 4rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .club-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 30%),
-                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 30%);
-            z-index: 1;
-        }
-
-        .club-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            text-align: center;
-        }
-
-        .meditation-icon {
-            font-size: 3.5rem;
-            color: var(--secondary);
-            margin-bottom: 2rem;
-            display: inline-block;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        .club-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .club-content p {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
-
-        /* Buttons */
         .btn-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
-            flex-wrap: wrap;
+          flex-direction: column;
+          gap: 1rem;
         }
 
         .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.9rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: 1rem;
+          width: 100%;
         }
-
-        .btn-primary {
-            background: linear-gradient(to right, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            color: var(--light);
-            border: 1px solid var(--dark-3);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--dark-1);
-            padding: 4rem 0 2rem;
-            border-top: 1px solid var(--dark-3);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            text-align: center;
-        }
-
-        .footer-logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-        }
-
-        .footer-description {
-            color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto 2rem;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .social-links a {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--dark-2);
-            color: var(--light);
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            border: 1px solid var(--dark-3);
-        }
-
-        .social-links a:hover {
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
-            border-color: transparent;
-        }
-
-        .copyright {
-            color: var(--dark-3);
-            font-size: 0.9rem;
-            margin-top: 2rem;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .header-content p {
-                font-size: 1.1rem;
-            }
-
-            .event-highlight {
-                padding: 1.2rem;
-            }
-
-            .event-highlight h2 {
-                font-size: 1.2rem;
-            }
-
-            .section {
-                padding: 2rem;
-            }
-
-            .section h2 {
-                font-size: 1.8rem;
-            }
-
-            .team-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .btn-group {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .btn {
-                width: 100%;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <div class="header-bg"></div>
-        <div class="header-content">
-            <h1>Thought Lab 3rd Year Induction Program</h1>
-            <p>Join us for an immersive induction experience where technical skills meet mindfulness practices</p>
-            <div class="event-highlight">
-                <h2>August 14, 2025</h2>
-                <p>5:00 PM - 7:00 PM | Wisdom Hall, Thought Lab</p>
-            </div>
+      <div class="header-bg"></div>
+      <div class="header-content">
+        <h1>Thought Lab 3rd Year Induction Program</h1>
+        <p>
+          Join us for an immersive induction experience where technical skills
+          meet mindfulness practices
+        </p>
+        <div class="event-highlight">
+          <h2>August 14, 2025</h2>
+          <p>5:00 PM - 7:00 PM | Wisdom Hall, Thought Lab</p>
         </div>
+      </div>
     </header>
 
     <div class="container main-content">
-        <section id="teams" class="section">
-            <h2>Teams You Can Join</h2>
-            <p class="section-description">Explore the technical teams where you can contribute and grow your skills</p>
-            
-            <div class="team-grid">
-                <div class="team-card">
-                    <h3><i class="fas fa-code"></i> Web Developers</h3>
-                    <ul>
-                        <li>Bring your laptops to showcase projects</li>
-                        <li>Share your portfolio with the team</li>
-                        <li>Work on real-world applications</li>
-                        <li>Learn modern frameworks and tools</li>
-                        <li>Collaborate on club website development</li>
-                    </ul>
-                </div>
-                
-                <div class="team-card">
-                    <h3><i class="fas fa-paint-brush"></i> Graphic Designers</h3>
-                    <ul>
-                        <li>Present your design projects</li>
-                        <li>Share any internship experience</li>
-                        <li>Create branding materials</li>
-                        <li>Work with UI/UX principles</li>
-                        <li>Collaborate on club marketing</li>
-                    </ul>
-                </div>
-                
-                <div class="team-card">
-                    <h3><i class="fas fa-film"></i> Video Editors</h3>
-                    <ul>
-                        <li>Showcase your editing projects</li>
-                        <li>Bring demo reels or portfolios</li>
-                        <li>Work on promotional content</li>
-                        <li>Learn advanced editing techniques</li>
-                        <li>Document club activities</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+      <section id="teams" class="section">
+        <h2>Teams You Can Join</h2>
+        <p class="section-description">
+          Explore the technical teams where you can contribute and grow your
+          skills
+        </p>
 
-        <section id="requirements" class="section">
-            <h2>Preparation Guide</h2>
-            <p>What you need to bring based on your team of interest</p>
-            
-            <div class="team-grid">
-                <div class="team-card">
-                    <h3><i class="fas fa-laptop-code"></i> For Web Devs</h3>
-                    <ul>
-                        <li>Laptop with your projects</li>
-                        <li>GitHub profile or portfolio link</li>
-                        <li>Any frameworks you've worked with</li>
-                        <li>Questions about web technologies</li>
-                    </ul>
-                </div>
-                
-                <div class="team-card">
-                    <h3><i class="fas fa-palette"></i> For Designers</h3>
-                    <ul>
-                        <li>Design portfolio (PDF/website)</li>
-                        <li>Tablet/laptop if available</li>
-                        <li>Examples of branding work</li>
-                        <li>Design software experience</li>
-                    </ul>
-                </div>
-                
-                <div class="team-card">
-                    <h3><i class="fas fa-video"></i> For Editors</h3>
-                    <ul>
-                        <li>Edited video samples</li>
-                        <li>Showreel if available</li>
-                        <li>Editing software experience</li>
-                        <li>Equipment you're familiar with</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+        <div class="team-grid">
+          <div class="team-card">
+            <h3><i class="fas fa-code"></i> Web Developers</h3>
+            <ul>
+              <li>Bring your laptops to showcase projects</li>
+              <li>Share your portfolio with the team</li>
+              <li>Work on real-world applications</li>
+              <li>Learn modern frameworks and tools</li>
+              <li>Collaborate on club website development</li>
+            </ul>
+          </div>
+
+          <div class="team-card">
+            <h3><i class="fas fa-paint-brush"></i> Graphic Designers</h3>
+            <ul>
+              <li>Present your design projects</li>
+              <li>Share any internship experience</li>
+              <li>Create branding materials</li>
+              <li>Work with UI/UX principles</li>
+              <li>Collaborate on club marketing</li>
+            </ul>
+          </div>
+
+          <div class="team-card">
+            <h3><i class="fas fa-film"></i> Video Editors</h3>
+            <ul>
+              <li>Showcase your editing projects</li>
+              <li>Bring demo reels or portfolios</li>
+              <li>Work on promotional content</li>
+              <li>Learn advanced editing techniques</li>
+              <li>Document club activities</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="requirements" class="section">
+        <h2>Preparation Guide</h2>
+        <p>What you need to bring based on your team of interest</p>
+
+        <div class="team-grid">
+          <div class="team-card">
+            <h3><i class="fas fa-laptop-code"></i> For Web Devs</h3>
+            <ul>
+              <li>Laptop with your projects</li>
+              <li>GitHub profile or portfolio link</li>
+              <li>Any frameworks you've worked with</li>
+              <li>Questions about web technologies</li>
+            </ul>
+          </div>
+
+          <div class="team-card">
+            <h3><i class="fas fa-palette"></i> For Designers</h3>
+            <ul>
+              <li>Design portfolio (PDF/website)</li>
+              <li>Tablet/laptop if available</li>
+              <li>Examples of branding work</li>
+              <li>Design software experience</li>
+            </ul>
+          </div>
+
+          <div class="team-card">
+            <h3><i class="fas fa-video"></i> For Editors</h3>
+            <ul>
+              <li>Edited video samples</li>
+              <li>Showreel if available</li>
+              <li>Editing software experience</li>
+              <li>Equipment you're familiar with</li>
+            </ul>
+          </div>
+        </div>
+      </section>
     </div>
 
     <section class="club-section">
-        <div class="club-content">
-            <div class="meditation-icon">
-                <i class="fas fa-spa"></i>
-            </div>
-            <h2>Mindfulness Initiative</h2>
-            <p>Our club uniquely combines technical skill development with mindfulness practices to promote mental well-being</p>
-            
-            <div class="team-grid" style="margin: 2rem auto; max-width: 800px;">
-                <div class="team-card">
-                    <h3><i class="fas fa-brain"></i> Mental Health Support</h3>
-                    <ul>
-                        <li>Professional counseling services</li>
-                        <li>Stress management workshops</li>
-                        <li>Peer support network</li>
-                        <li>Mental health resources</li>
-                    </ul>
-                </div>
-                
-                <div class="team-card">
-                    <h3><i class="fas fa-om"></i> Meditation Practices</h3>
-                    <ul>
-                        <li>Weekly guided meditation</li>
-                        <li>Chakra alignment sessions</li>
-                        <li>Breathing techniques</li>
-                        <li>Mindfulness training</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <p style="margin-top: 2rem;">We meet every Thursday 4-6pm for combined technical workshops and meditation sessions. All students are welcome regardless of experience.</p>
-            
-            <div class="btn-group">
-                <a href="#register" class="btn btn-primary">
-                    <i class="fas fa-user-plus" style="margin-right: 8px;"></i> Register Now
-                </a>
-                <a href="#learn-more" class="btn btn-secondary">
-                    <i class="fas fa-info-circle" style="margin-right: 8px;"></i> Learn More
-                </a>
-            </div>
+      <div class="club-content">
+        <div class="meditation-icon">
+          <i class="fas fa-spa"></i>
         </div>
+        <h2>Mindfulness Initiative</h2>
+        <p>
+          Our club uniquely combines technical skill development with
+          mindfulness practices to promote mental well-being
+        </p>
+
+        <div class="team-grid" style="margin: 2rem auto; max-width: 800px">
+          <div class="team-card">
+            <h3><i class="fas fa-brain"></i> Mental Health Support</h3>
+            <ul>
+              <li>Professional counseling services</li>
+              <li>Stress management workshops</li>
+              <li>Peer support network</li>
+              <li>Mental health resources</li>
+            </ul>
+          </div>
+
+          <div class="team-card">
+            <h3><i class="fas fa-om"></i> Meditation Practices</h3>
+            <ul>
+              <li>Weekly guided meditation</li>
+              <li>Chakra alignment sessions</li>
+              <li>Breathing techniques</li>
+              <li>Mindfulness training</li>
+            </ul>
+          </div>
+        </div>
+
+        <p style="margin-top: 2rem">
+          We meet every Thursday 4-6pm for combined technical workshops and
+          meditation sessions. All students are welcome regardless of
+          experience.
+        </p>
+
+        <div class="btn-group">
+          <a href="#register" class="btn btn-primary">
+            <i class="fas fa-user-plus" style="margin-right: 8px"></i> Register
+            Now
+          </a>
+          <a href="#learn-more" class="btn btn-secondary">
+            <i class="fas fa-info-circle" style="margin-right: 8px"></i> Learn
+            More
+          </a>
+        </div>
+      </div>
     </section>
 
     <footer>
-        <div class="footer-content">
-            <div class="footer-logo">Thought Lab</div>
-            <p class="footer-description">Bridging technology and mindfulness for holistic student development</p>
-            
-            <div class="social-links">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-github"></i></a>
-            </div>
-            
-            <p class="copyright">© 2025 Thought Lab Club. All rights reserved.</p>
+      <div class="footer-content">
+        <div class="footer-logo">Thought Lab</div>
+        <p class="footer-description">
+          Bridging technology and mindfulness for holistic student development
+        </p>
+
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/ashish-saini-a641902b3/"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com/ASHISH-SAINI78021"><i class="fab fa-github"></i></a>
+          <a href="mailto:12213075@nitkkr.ac.in"><i class="fas fa-envelope"></i></a>
         </div>
+
+        <p class="copyright">© 2025 Thought Lab Club. All rights reserved.</p>
+      </div>
     </footer>
 
     <script>
-        // Animate sections when they come into view
-        document.addEventListener('DOMContentLoaded', function() {
-            const sections = document.querySelectorAll('.section');
-            
-            const animateSections = () => {
-                sections.forEach((section, index) => {
-                    const sectionTop = section.getBoundingClientRect().top;
-                    const windowHeight = window.innerHeight;
-                    
-                    if (sectionTop < windowHeight - 100) {
-                        section.classList.add('visible');
-                    }
-                });
-            };
-            
-            // Run once on load
-            animateSections();
-            
-            // Run on scroll
-            window.addEventListener('scroll', animateSections);
-            
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        window.scrollTo({
-                            top: target.offsetTop - 100,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
+      // Animate sections when they come into view
+      document.addEventListener("DOMContentLoaded", function () {
+        const sections = document.querySelectorAll(".section");
+
+        const animateSections = () => {
+          sections.forEach((section, index) => {
+            const sectionTop = section.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+
+            if (sectionTop < windowHeight - 100) {
+              section.classList.add("visible");
+            }
+          });
+        };
+
+        // Run once on load
+        animateSections();
+
+        // Run on scroll
+        window.addEventListener("scroll", animateSections);
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute("href"));
+            if (target) {
+              window.scrollTo({
+                top: target.offsetTop - 100,
+                behavior: "smooth",
+              });
+            }
+          });
         });
+      });
     </script>
-</body>
+  </body>
 </html>
